@@ -47,20 +47,28 @@
           inherit inputs pkgs;
           modules = [
             {
-              env.LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" (with pkgs; [
-                expat
-                fontconfig
-                freetype
-                freetype.dev
-                libGL
+              packages = with pkgs; [
+                at-spi2-atk
+                atkmm
+                cairo
+                dioxus-cli
+                gdk-pixbuf
+                glib
+                gobject-introspection
+                gtk3
+                harfbuzz
+                libiconv
+                librsvg
+                libsoup_3
+                lld
+                openssl
+                pango
                 pkg-config
-                xorg.libX11
-                xorg.libXcursor
-                xorg.libXi
-                xorg.libXrandr
-                wayland
-                libxkbcommon
-              ]);
+                tailwindcss
+                wasm-bindgen-cli
+                webkitgtk_4_1
+                xdotool
+              ];
               languages.rust.enable = true;
             }
           ];
