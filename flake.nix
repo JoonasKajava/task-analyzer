@@ -70,6 +70,11 @@
                 xdotool
               ];
               languages.rust.enable = true;
+              process.manager.implementation = "mprocs";
+              processes = {
+                tailwind-watch.exec = "(while true; do sleep 10; done) | ${pkgs.tailwindcss}/bin/tailwindcss --input $DEVENV_ROOT/tailwind.css --output $DEVENV_ROOT/assets/tailwind.css --watch;";
+                dx-serve.exec = "dx serve --platform web ";
+              };
             }
           ];
         };
