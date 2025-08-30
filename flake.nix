@@ -47,6 +47,7 @@
           inherit inputs pkgs;
           modules = [
             {
+              env.DATABASE_URL = "./.env/database.sqlite";
               packages = with pkgs; [
                 at-spi2-atk
                 atkmm
@@ -68,6 +69,7 @@
                 wasm-bindgen-cli
                 webkitgtk_4_1
                 xdotool
+                diesel-cli
               ];
               languages.rust.enable = true;
               process.manager.implementation = "mprocs";
