@@ -554,6 +554,6 @@ video {
   display: none;
 }
 
-.relative {
-  position: relative;
+.table {
+  display: table;
 }

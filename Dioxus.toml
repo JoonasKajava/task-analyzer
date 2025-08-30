@@ -3,7 +3,7 @@
 [web.app]
 
 # HTML title tag content
-title = "task-tracker"
+title = "task-analyzer"
 
 # include `assets` in web platform
 [web.resource]

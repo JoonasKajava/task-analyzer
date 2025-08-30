@@ -26,12 +26,12 @@
       devenv-up = self.devShells.${system}.default.config.procfileScript;
       devenv-test = self.devShells.${system}.default.config.test;
       default = pkgs.rustPlatform.buildRustPackage {
-        pname = "task-tracker";
+        pname = "task-analyzer";
         version = "0.1.0";
         cargoLock.lockFile = ./Cargo.lock;
         src = nixpkgs.lib.cleanSource ./.;
         meta = {
-          mainProgram = "task-tracker";
+          mainProgram = "task-analyzer";
           license = pkgs.lib.licenses.mit;
           maintainers = ["Joonas Kajava"];
         };
