@@ -2,6 +2,7 @@ use dioxus::prelude::*;
 
 mod components;
 mod views;
+mod backend;
 
 use views::Home;
 
