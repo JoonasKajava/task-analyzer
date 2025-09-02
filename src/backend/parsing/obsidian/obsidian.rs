@@ -11,7 +11,7 @@ pub struct ActivityEntry {
     pub key: String,
     pub sub_key: Option<String>,
     pub start_time: NaiveTime,
-    pub end_time: NaiveTime,
+    pub end_time: Option<NaiveTime>,
 }
 
 #[derive(Debug, Error)]
@@ -38,7 +38,7 @@ impl ObsidianParser {
 
     fn parse_task(listitem: &Node) -> Option<ActivityEntry> {
         let text = ObsidianParser::collect_text(listitem);
-        let reg = Regex::new(r"(\d{2}:\d{2}) - (\d{2}:\d{2}).+?(JIRA:.+?)\s").expect("TODO");
+        let reg = Regex::new(r"(\d{2}:\d{2})(?: - )?(?:(\d{2}:\d{2})?).+?(JIRA:.+?)\s").expect("TODO");
 
         let captures = reg.captures(&text)?;
 
@@ -47,7 +47,7 @@ impl ObsidianParser {
         let key = captures.get(3)?;
 
         let start = NaiveTime::parse_from_str(start.as_str(), "%R").ok()?;
-        let end = NaiveTime::parse_from_str(end.as_str(), "%R").ok()?;
+        let end = NaiveTime::parse_from_str(end.as_str(), "%R").ok();
 
         Some(ActivityEntry {
             key:  key.as_str().to_string(),

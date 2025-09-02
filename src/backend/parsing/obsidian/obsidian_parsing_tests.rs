@@ -18,13 +18,19 @@ mod tests {
                     key: "JIRA:ABC-123".into(),
                     sub_key: None,
                     start_time: NaiveTime::from_hms_opt(8, 0, 0).unwrap(),
-                    end_time: NaiveTime::from_hms_opt(11, 0, 0).unwrap()
+                    end_time: NaiveTime::from_hms_opt(11, 0, 0)
                 },
                 ActivityEntry {
                     key: "JIRA:XYZ-999".into(),
                     sub_key: None,
                     start_time: NaiveTime::from_hms_opt(8, 20, 0).unwrap(),
-                    end_time: NaiveTime::from_hms_opt(11, 43, 0).unwrap()
+                    end_time: NaiveTime::from_hms_opt(11, 43, 0)
+                },
+                ActivityEntry {
+                    key: "JIRA:XYZ-999".into(),
+                    sub_key: None,
+                    start_time: NaiveTime::from_hms_opt(7, 0, 0).unwrap(),
+                    end_time: None
                 }
             ]
         );

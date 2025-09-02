@@ -13,6 +13,7 @@ diesel = { version = "2.2.12", features = ["sqlite"] }
 dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
 dirs = "6.0.0"
 markdown = "1.0.0"
+nom = "8.0.0"
 regex = "1.11.2"
 thiserror = "2.0.16"
 
