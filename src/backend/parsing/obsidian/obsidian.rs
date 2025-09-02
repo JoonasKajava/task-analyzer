@@ -6,7 +6,7 @@ use thiserror::Error;
 pub struct ObsidianParser;
 
 // Temp
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialEq)]
 pub struct ActivityEntry {
     pub key: String,
     pub sub_key: Option<String>,
