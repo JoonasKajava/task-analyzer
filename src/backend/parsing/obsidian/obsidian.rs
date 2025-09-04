@@ -1,4 +1,4 @@
-use chrono::{NaiveDateTime, NaiveTime};
+use chrono::NaiveTime;
 
 use markdown::mdast::{ListItem, Node, Paragraph, Text};
 use regex::Regex;
@@ -23,11 +23,11 @@ pub enum ObsidianParseError {
 }
 //
 impl ObsidianParser {
-
     fn collect_text(node: &Node) -> String {
         match node {
             Node::Text(Text { value, .. }) => value.clone(),
-            Node::Paragraph(Paragraph { children, .. }) | Node::ListItem(ListItem {children, ..}) => children
+            Node::Paragraph(Paragraph { children, .. })
+            | Node::ListItem(ListItem { children, .. }) => children
                 .iter()
                 .map(ObsidianParser::collect_text)
                 .collect::<Vec<String>>()
@@ -38,7 +38,8 @@ impl ObsidianParser {
 
     fn parse_task(listitem: &Node) -> Option<ActivityEntry> {
         let text = ObsidianParser::collect_text(listitem);
-        let reg = Regex::new(r"(\d{2}:\d{2})(?: - )?(?:(\d{2}:\d{2})?).+?(JIRA:.+?)\s").expect("TODO");
+        let reg =
+            Regex::new(r"(\d{2}:\d{2})(?: - )?(?:(\d{2}:\d{2})?).+?(JIRA:.+?)\s").expect("TODO");
 
         let captures = reg.captures(&text)?;
 
@@ -49,12 +50,14 @@ impl ObsidianParser {
         let start = NaiveTime::parse_from_str(start.as_str(), "%R").ok()?;
         let end = NaiveTime::parse_from_str(end.as_str(), "%R").ok();
 
-        Some(ActivityEntry {
-            key:  key.as_str().to_string(),
+        let ae = ActivityEntry {
+            key: key.as_str().to_string(),
             sub_key: None,
             start_time: start,
             end_time: end,
-        })
+        };
+
+        Some(ae)
     }
 
     fn find_tasks(node: &Node, tasks: &mut Vec<ActivityEntry>) {
@@ -63,7 +66,7 @@ impl ObsidianParser {
                 if let Some(activity) = ObsidianParser::parse_task(node) {
                     tasks.push(activity);
                 }
-            },
+            }
             _ => {
                 if let Some(children) = node.children() {
                     children
