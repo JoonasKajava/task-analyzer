@@ -45,38 +45,29 @@
       in {
         default = devenv.lib.mkShell {
           inherit inputs pkgs;
-          modules = [
+          modules = let
+            buildInputs = with pkgs; [
+              libxkbcommon
+              libGL
+
+              # WINIT_UNIX_BACKEND=wayland
+              wayland
+
+              # WINIT_UNIX_BACKEND=x11
+              xorg.libXcursor
+              xorg.libXrandr
+              xorg.libXi
+              xorg.libX11
+            ];
+          in [
             {
               env.DATABASE_URL = "./.env/database.sqlite";
+              env.LD_LIBRARY_PATH = "${nixpkgs.lib.makeLibraryPath buildInputs}";
               packages = with pkgs; [
-                at-spi2-atk
-                atkmm
-                cairo
-                dioxus-cli
-                gdk-pixbuf
-                glib
-                gobject-introspection
-                gtk3
-                harfbuzz
-                libiconv
-                librsvg
-                libsoup_3
-                lld
-                openssl
-                pango
-                pkg-config
-                tailwindcss
-                wasm-bindgen-cli
-                webkitgtk_4_1
-                xdotool
                 diesel-cli
               ];
               languages.rust.enable = true;
               process.manager.implementation = "mprocs";
-              processes = {
-                tailwind-watch.exec = "(while true; do sleep 10; done) | ${pkgs.tailwindcss}/bin/tailwindcss --input $DEVENV_ROOT/tailwind.css --output $DEVENV_ROOT/assets/tailwind.css --watch;";
-                dx-serve.exec = "dx serve --platform web ";
-              };
             }
           ];
         };
