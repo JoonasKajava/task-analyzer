@@ -1,3 +1,5 @@
+use egui::RichText;
+
 fn main() -> eframe::Result {
     env_logger::init();
 
@@ -11,10 +13,12 @@ fn main() -> eframe::Result {
 }
 
 #[derive(Default)]
-struct TaskAnalyzerApp {}
+struct TaskAnalyzerApp {
+    pub font_size: f32
+}
 
 impl TaskAnalyzerApp {
-    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+    fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         Self::default()
     }
 }
@@ -29,12 +33,7 @@ impl eframe::App for TaskAnalyzerApp {
     }
 
     fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] {
-        // NOTE: a bright gray makes the shadows of the windows look weird.
-        // We use a bit of transparency so that if the user switches on the
-        // `transparent()` option they get immediate results.
-        egui::Color32::from_rgba_unmultiplied(12, 12, 12, 180).to_normalized_gamma_f32()
-
-        // _visuals.window_fill() would also be a natural choice
+        _visuals.window_fill().to_normalized_gamma_f32()
     }
 
     fn persist_egui_memory(&self) -> bool {
@@ -43,10 +42,11 @@ impl eframe::App for TaskAnalyzerApp {
 
     fn raw_input_hook(&mut self, _ctx: &egui::Context, _raw_input: &mut egui::RawInput) {}
 
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Hello World!");
-            ui.label("This is a template for a Rust GUI application using eframe and egui.");
+            ui.add(egui::Slider::new(&mut self.font_size, 1.0..=100.0));
+            ui.label(RichText::new("This is a template for a Rust GUI application using eframe and egui.").size(self.font_size));
         });
     }
 }
