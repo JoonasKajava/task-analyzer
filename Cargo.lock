@@ -1044,6 +1044,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "egui_app"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "diesel",
+ "dirs",
+ "eframe",
+ "egui",
+ "env_logger",
+ "parser",
+ "thiserror 2.0.16",
+]
+
+[[package]]
 name = "egui_glow"
 version = "0.32.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1894,9 +1908,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.27"
+version = "0.4.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13dc2df351e3202783a1fe0d44375f7295ffb4049267b0f3018346dc122a1d94"
+checksum = "34080505efa8e45a4b816c349525ebe327ceaa8559756f0356cba97ef3bf7432"
 
 [[package]]
 name = "malloc_buf"
@@ -2470,6 +2484,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "parser"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "log",
+ "markdown",
+ "nom",
+ "thiserror 2.0.16",
+]
+
+[[package]]
 name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3013,23 +3039,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "task-analyzer"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "diesel",
- "dirs",
- "eframe",
- "egui",
- "env_logger",
- "markdown",
- "nom",
- "regex",
- "thiserror 2.0.16",
 ]
 
 [[package]]

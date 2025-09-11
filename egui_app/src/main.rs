@@ -1,4 +1,4 @@
-use egui::RichText;
+use parser::{obsidian::obsidian::ActivityEntry, task_parser::TaskParser};
 
 fn main() -> eframe::Result {
     env_logger::init();
@@ -14,12 +14,17 @@ fn main() -> eframe::Result {
 
 #[derive(Default)]
 struct TaskAnalyzerApp {
-    pub font_size: f32
+    pub font_size: f32,
+    pub test_task_string: String,
 }
 
 impl TaskAnalyzerApp {
     fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         Self::default()
+    }
+
+    fn get_task(string: &String) -> Option<ActivityEntry> {
+        TaskParser::parse_activity(string.as_bytes()).ok()?
     }
 }
 
@@ -45,8 +50,16 @@ impl eframe::App for TaskAnalyzerApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Hello World!");
-            ui.add(egui::Slider::new(&mut self.font_size, 1.0..=100.0));
-            ui.label(RichText::new("This is a template for a Rust GUI application using eframe and egui.").size(self.font_size));
+
+            ui.text_edit_singleline(&mut self.test_task_string);
+
+            let activity = TaskAnalyzerApp::get_task(&self.test_task_string);
+
+            ui.label(match activity {
+                Some(_) => format!("Parsed Activity: {activity:?}"),
+                None => "Not valid".into(),
+            });
+            
         });
     }
 }

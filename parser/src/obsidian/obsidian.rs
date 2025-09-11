@@ -1,8 +1,11 @@
 use chrono::NaiveTime;
 
+use log::error;
 use markdown::mdast::{ListItem, Node, Paragraph, Text};
-use regex::Regex;
+
 use thiserror::Error;
+
+use crate::task_parser::TaskParser;
 pub struct ObsidianParser;
 
 // Temp
@@ -38,26 +41,14 @@ impl ObsidianParser {
 
     fn parse_task(listitem: &Node) -> Option<ActivityEntry> {
         let text = ObsidianParser::collect_text(listitem);
-        let reg =
-            Regex::new(r"(\d{2}:\d{2})(?: - )?(?:(\d{2}:\d{2})?).+?(JIRA:.+?)\s").expect("TODO");
-
-        let captures = reg.captures(&text)?;
-
-        let start = captures.get(1)?;
-        let end = captures.get(2)?;
-        let key = captures.get(3)?;
-
-        let start = NaiveTime::parse_from_str(start.as_str(), "%R").ok()?;
-        let end = NaiveTime::parse_from_str(end.as_str(), "%R").ok();
-
-        let ae = ActivityEntry {
-            key: key.as_str().to_string(),
-            sub_key: None,
-            start_time: start,
-            end_time: end,
-        };
-
-        Some(ae)
+        match TaskParser::parse_activity(text.as_bytes()) {
+            Ok(x) => x,
+            Err(e) => {
+                println!("{e:?}");
+                error!("{e:?}");
+                None
+            }
+        }
     }
 
     fn find_tasks(node: &Node, tasks: &mut Vec<ActivityEntry>) {

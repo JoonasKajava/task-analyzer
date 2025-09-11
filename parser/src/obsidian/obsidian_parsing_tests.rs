@@ -1,9 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use anyhow::Result;
+    use crate::obsidian::obsidian::ActivityEntry;
+use anyhow::Result;
     use chrono::NaiveTime;
 
-    use crate::backend::parsing::obsidian::obsidian::{ActivityEntry, ObsidianParser};
+    use crate::obsidian::obsidian::ObsidianParser;
 
     #[test]
     fn test_simple() -> Result<()> {
