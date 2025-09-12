@@ -1,5 +1,9 @@
+mod jira_debug_window;
+
 use data_processing::activity_entry::ActivityEntry;
 use data_processing::parsing::task_parser::TaskParser;
+
+use crate::jira_debug_window::JiraDebugWindow;
 
 fn main() -> eframe::Result {
     env_logger::init();
@@ -15,8 +19,7 @@ fn main() -> eframe::Result {
 
 #[derive(Default)]
 struct TaskAnalyzerApp {
-    pub test_task_string: String,
-    pub show_jira_test_window: bool,
+    pub jira_debug: JiraDebugWindow,
 }
 
 impl TaskAnalyzerApp {
@@ -52,32 +55,12 @@ impl eframe::App for TaskAnalyzerApp {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             egui::MenuBar::new().ui(ui, |ui| {
                 ui.menu_button("Debug", |ui| {
-                    if ui
-                        .add_enabled(
-                            !self.show_jira_test_window,
-                            egui::Button::new("Open JIRA parsing test"),
-                        )
-                        .clicked()
-                    {
-                        self.show_jira_test_window = true;
-                    }
+                    self.jira_debug.button(ui);
                 })
             })
         });
 
-        egui::Window::new("JIRA parsing test")
-            .collapsible(true)
-            .open(&mut self.show_jira_test_window)
-            .show(ctx, |ui| {
-                ui.text_edit_singleline(&mut self.test_task_string);
-
-                let activity = TaskAnalyzerApp::get_task(&self.test_task_string);
-
-                ui.label(match activity {
-                    Some(_) => format!("Parsed Activity: {activity:?}"),
-                    None => "Not valid".into(),
-                });
-            });
+        self.jira_debug.window(ctx);
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Hello World!");
