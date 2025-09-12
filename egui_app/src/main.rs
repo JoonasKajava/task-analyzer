@@ -1,6 +1,5 @@
-use data_processing::parsing::task_parser::TaskParser;
 use data_processing::activity_entry::ActivityEntry;
-
+use data_processing::parsing::task_parser::TaskParser;
 
 fn main() -> eframe::Result {
     env_logger::init();
@@ -17,6 +16,7 @@ fn main() -> eframe::Result {
 #[derive(Default)]
 struct TaskAnalyzerApp {
     pub test_task_string: String,
+    pub show_jira_test_window: bool,
 }
 
 impl TaskAnalyzerApp {
@@ -49,18 +49,38 @@ impl eframe::App for TaskAnalyzerApp {
     fn raw_input_hook(&mut self, _ctx: &egui::Context, _raw_input: &mut egui::RawInput) {}
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+            egui::MenuBar::new().ui(ui, |ui| {
+                ui.menu_button("Debug", |ui| {
+                    if ui
+                        .add_enabled(
+                            !self.show_jira_test_window,
+                            egui::Button::new("Open JIRA parsing test"),
+                        )
+                        .clicked()
+                    {
+                        self.show_jira_test_window = true;
+                    }
+                })
+            })
+        });
+
+        egui::Window::new("JIRA parsing test")
+            .collapsible(true)
+            .open(&mut self.show_jira_test_window)
+            .show(ctx, |ui| {
+                ui.text_edit_singleline(&mut self.test_task_string);
+
+                let activity = TaskAnalyzerApp::get_task(&self.test_task_string);
+
+                ui.label(match activity {
+                    Some(_) => format!("Parsed Activity: {activity:?}"),
+                    None => "Not valid".into(),
+                });
+            });
+
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Hello World!");
-
-            ui.text_edit_singleline(&mut self.test_task_string);
-
-            let activity = TaskAnalyzerApp::get_task(&self.test_task_string);
-
-            ui.label(match activity {
-                Some(_) => format!("Parsed Activity: {activity:?}"),
-                None => "Not valid".into(),
-            });
-            
         });
     }
 }
