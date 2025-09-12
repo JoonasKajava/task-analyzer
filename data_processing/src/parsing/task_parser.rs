@@ -1,7 +1,7 @@
-use crate::obsidian::obsidian::ActivityEntry;
+use crate::activity_entry::ActivityEntry;
 use chrono::NaiveTime;
 use nom::{
-    bytes::complete::{take_until, take_while, take_while1}, AsChar, IResult, Parser
+    bytes::complete::{take_until, take_while, take_while1}, IResult, Parser
 };
 
 use anyhow::{Result, bail};
@@ -74,10 +74,10 @@ impl<'a> TaskParser<'a> {
 
 #[cfg(test)]
 mod tests {
-    use crate::task_parser::ActivityEntry;
-    use crate::task_parser::TaskParser;
     use anyhow::{Ok, Result};
     use chrono::NaiveTime;
+
+    use crate::{activity_entry::ActivityEntry, parsing::task_parser::TaskParser};
 
     #[test]
     fn test_parse() -> Result<()> {

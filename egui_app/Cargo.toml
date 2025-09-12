@@ -11,4 +11,4 @@ egui = "0.32.2"
 env_logger = { version = "0.11.8", features = ["humantime", "auto-color"] }
 anyhow = "1.0.99"
 thiserror = "2.0.16"
-parser = {path = "../parser"}
+data_processing = {path = "../data_processing"}

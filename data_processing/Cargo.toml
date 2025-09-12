@@ -1,10 +1,11 @@
 [package]
-name = "parser"
+name = "data_processing"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-chrono = "0.4.41"
+chrono = "0.4.42"
+diesel = "2.3.1"
 markdown = "1.0.0"
 nom = "8.0.0"
 anyhow = "1.0.99"

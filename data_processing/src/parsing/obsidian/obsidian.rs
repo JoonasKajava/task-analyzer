@@ -8,14 +8,6 @@ use thiserror::Error;
 use crate::task_parser::TaskParser;
 pub struct ObsidianParser;
 
-// Temp
-#[derive(Debug, Default, PartialEq)]
-pub struct ActivityEntry {
-    pub key: String,
-    pub sub_key: Option<String>,
-    pub start_time: NaiveTime,
-    pub end_time: Option<NaiveTime>,
-}
 
 #[derive(Debug, Error)]
 pub enum ObsidianParseError {

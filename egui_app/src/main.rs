@@ -1,4 +1,6 @@
-use parser::{obsidian::obsidian::ActivityEntry, task_parser::TaskParser};
+use data_processing::parsing::task_parser::TaskParser;
+use data_processing::activity_entry::ActivityEntry;
+
 
 fn main() -> eframe::Result {
     env_logger::init();
@@ -14,7 +16,6 @@ fn main() -> eframe::Result {
 
 #[derive(Default)]
 struct TaskAnalyzerApp {
-    pub font_size: f32,
     pub test_task_string: String,
 }
 
