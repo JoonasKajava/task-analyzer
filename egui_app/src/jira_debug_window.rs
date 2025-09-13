@@ -1,6 +1,7 @@
 use egui::{Ui};
 
-use crate::TaskAnalyzerApp;
+use crate::App;
+
 
 #[derive(Default)]
 pub struct JiraDebugWindow {
@@ -16,7 +17,7 @@ impl JiraDebugWindow {
             .show(ctx, |ui| {
                 ui.text_edit_singleline(&mut self.task_string);
 
-                let activity = TaskAnalyzerApp::get_task(&self.task_string);
+                let activity = App::get_task(&self.task_string);
 
                 ui.label(match activity {
                     Some(_) => format!("Parsed Activity: {activity:?}"),
