@@ -12,3 +12,5 @@ env_logger = { version = "0.11.8", features = ["humantime", "auto-color"] }
 anyhow = "1.0.99"
 thiserror = "2.0.16"
 data_processing = {path = "../data_processing"}
+egui_animation = "0.9.0"
+egui_router = "0.5.0"
