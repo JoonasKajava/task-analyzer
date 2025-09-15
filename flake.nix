@@ -63,6 +63,9 @@
             {
               env.DATABASE_URL = "./.env/database.sqlite";
               env.LD_LIBRARY_PATH = "${nixpkgs.lib.makeLibraryPath buildInputs}";
+
+              env.RUST_LOG = "info";
+
               packages = with pkgs; [
                 diesel-cli
               ];

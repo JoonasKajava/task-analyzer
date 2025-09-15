@@ -1,19 +1,27 @@
+mod app_settings;
 mod jira_debug_window;
 mod routes;
-pub mod views;
 pub mod side_menu;
-mod app_settings;
+pub mod views;
+
+use std::time::Duration;
 
 use data_processing::activity_entry::ActivityEntry;
 use data_processing::parsing::task_parser::TaskParser;
 use egui_inbox::{UiInbox, UiInboxSender};
+use egui_notify::Toasts;
 use egui_router::EguiRouter;
-use log::error;
+use log::{error, info};
 
-use crate::{app_settings::AppSettings, jira_debug_window::JiraDebugWindow, routes::router, side_menu::show_side_menu};
+use crate::{
+    app_settings::AppSettings, jira_debug_window::JiraDebugWindow, routes::router,
+    side_menu::show_side_menu,
+};
 
 fn main() -> eframe::Result {
-    env_logger::init();
+    env_logger::builder()
+        .target(env_logger::Target::Stdout)
+        .init();
 
     let native_options = eframe::NativeOptions::default();
 
@@ -40,6 +48,7 @@ fn main() -> eframe::Result {
                 router,
                 inbox,
                 state,
+                toasts: Toasts::default(),
             }))
         }),
     )
@@ -68,6 +77,7 @@ pub struct App {
     router: EguiRouter<State>,
     inbox: UiInbox<Message>,
     state: State,
+    toasts: Toasts,
 }
 
 impl App {
@@ -75,10 +85,22 @@ impl App {
         TaskParser::parse_activity(string.as_bytes()).ok()?
     }
 
+    fn save_settings(&mut self) {
+        match self.state.settings.save() {
+            Ok(_) => info!("Settings saved successfully"),
+            Err(err) => {
+                self.toasts
+                    .error(err.to_string())
+                    .duration(Some(Duration::from_secs(5)));
+
+                error!("Failed to save settings: {err}")
+            }
+        }
+    }
 }
 
 impl eframe::App for App {
-    fn save(&mut self, _storage: &mut dyn eframe::Storage) {}
+    fn save(&mut self, _storage: &mut dyn eframe::Storage) { }
 
     fn on_exit(&mut self, _gl: Option<&eframe::glow::Context>) {}
 
@@ -97,11 +119,16 @@ impl eframe::App for App {
     fn raw_input_hook(&mut self, _ctx: &egui::Context, _raw_input: &mut egui::RawInput) {}
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.toasts.show(ctx);
+
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             egui::MenuBar::new().ui(ui, |ui| {
                 ui.menu_button("Debug", |ui| {
                     self.state.jira_debug.button(ui);
                 });
+                if ui.button("Save").clicked() {
+                    self.save_settings();
+                }
             })
         });
 
