@@ -1,5 +1,5 @@
 use std::{
-    fs::{OpenOptions},
+    fs::{create_dir_all, OpenOptions},
     io::{self, Write},
 };
 
@@ -30,6 +30,8 @@ impl AppSettings {
     pub fn save(&self) -> Result<(), SaveError> {
         let dir = config_dir().ok_or(SaveError::ConfigDirNotFound)?;
         let config_file = dir.join("task_analyzer/config.toml");
+
+        create_dir_all(config_file.parent().unwrap()).map_err(SaveError::FailedToOpenOrCreateFile)?;
 
         let serialized = toml::to_string_pretty(self).map_err(SaveError::TomlSerializationError)?;
 
