@@ -12,6 +12,8 @@ use thiserror::Error;
 pub struct AppSettings {
     #[egui_probe(name = "Daily Notes Roots")]
     pub daily_notes_roots: Vec<String>,
+    #[egui_probe(name = "If end time is missing, assume duration of (e.g. 30m, 1h)")]
+    pub assume_duration_on_missing_end_time: Option<String>,
 }
 
 #[derive(Error, Debug)]
